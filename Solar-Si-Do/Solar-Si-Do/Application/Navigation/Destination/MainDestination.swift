@@ -2,6 +2,7 @@ import SwiftUI
 
 enum MainDestination: NavigationDestination {
     case home
+    case selectFeedbackStyle
     case writeFeedback
     case feedbackResult(feedback: String, actionItems: [String])
     
@@ -10,6 +11,8 @@ enum MainDestination: NavigationDestination {
         switch self {
         case .home:
             MainView()
+        case .selectFeedbackStyle:
+            SelectFeedbackStyleView()
         case .writeFeedback:
             WriteFeedbackView()
         case .feedbackResult(let feedback, let actionItems):

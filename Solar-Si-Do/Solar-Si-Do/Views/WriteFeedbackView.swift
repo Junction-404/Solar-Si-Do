@@ -57,7 +57,3 @@ struct WriteFeedbackView: View {
         }
     }
 }
-
-#Preview {
-    WriteFeedbackView()
-}

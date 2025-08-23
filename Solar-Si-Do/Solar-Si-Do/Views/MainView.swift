@@ -5,11 +5,20 @@ struct MainView: View {
     @StateObject private var viewModel = MainViewModel()
     
     var body: some View {
-        Text("메인 뷰")
-        Button(action:
-                viewModel.tapNextButton
-        ){
-            Text("다음")
+        TabView {
+            AddFeedbackView()
+                .tabItem {
+                    Text("피드백 주기")
+                }
+            
+            ReceiveFeedbackView()
+                .tabItem {
+                    Text("피드백 받기")
+                }
         }
     }
+}
+
+#Preview {
+    MainView()
 }
