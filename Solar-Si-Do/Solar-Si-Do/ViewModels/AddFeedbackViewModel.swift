@@ -9,8 +9,8 @@
 import Foundation
 
 @MainActor
-class MainViewModel: ObservableObject {
+class AddFeedbackViewModel: ObservableObject {
     
     private let navigationManager = NavigationManager.shared
-    
+
 }

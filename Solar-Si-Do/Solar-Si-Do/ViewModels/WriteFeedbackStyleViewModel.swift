@@ -9,9 +9,12 @@
 import Foundation
 
 @MainActor
-class WriteFeedbackViewModel: ObservableObject {
+class WriteFeedbackStyleViewModel: ObservableObject {
     
     private let navigationManager = NavigationManager.shared
-
+    
+    func tapNextButton() {
+        navigationManager.navigate(to: .main(.home))
+    }
 
 }

@@ -3,15 +3,15 @@ import SwiftUI
 
 enum MainDestination: NavigationDestination {
     case home
-    case writeFeedback
+    case writeFeedbackStyle
     
     @ViewBuilder
     func view() -> some View {
         switch self {
         case .home:
             MainView()
-        case .writeFeedback:
-            WriteFeedbackView()
+        case .writeFeedbackStyle:
+            WriteFeedbackStyleView()
         }
     }
 }
