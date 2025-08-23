@@ -76,6 +76,7 @@ struct WriteFeedbackView: View {
                         .foregroundColor(.white)
                         .cornerRadius(12)
                 }
+                .padding(.bottom, 20)
                 
                 if viewModel.isLoading {
                     ProgressView("생성 중...")
