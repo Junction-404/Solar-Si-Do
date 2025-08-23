@@ -29,21 +29,21 @@ Your output must contain:
 
 Your response must be a **JSON object** with two fields: `feedback` and `action_items`.
 
-Please follow these principles when you write "feedback" field:
+When writing `feedback`, follow these principles:
 – Reflect the user’s underlying intention with softened, emotionally intelligent language
 – Focus on specific behaviors and clear, non-accusatory suggestions for improvement
 – Maintain a tone of collaboration, trust, and mutual respect
+- Make it not too long
 
 Example output:
 {
-  "feedback": "Howard, I really appreciate...",
+  "feedback": "하워드, 항상 창의적인 아이디어를 적극적으로 내주셔서 프로젝트에 많은 활력을 더해주고 있어요. 특히 초기 단계에서 다양한 관점을 제시해주는 점은 정말 큰 강점이에요. 다만, ​진행 중인 단계에서 갑작스럽게 새로운 아이디어가 제시되면​ 현재 워크플로우에 혼란이 생기거나 일정 조율이 어려워질 때가 있어요. 예를 들어, 디자인 컨펌이 끝난 후 레이아웃 변경을 제안해주실 경우, 팀원들의 피로도가 높아지는 것 같아요.",
   "action_items": [
-    "Share new ideas before layout is finalized.",
-    "Discuss late changes directly with the designer."
+    "회의시간 5분 전에 도착하기",
+    "수정 사항을 미리 이야기하기"
   ]
-
-Please make all output in Korean.
 }
+Please make all output in Korean.
 """
 
     func generateFeedback() {
