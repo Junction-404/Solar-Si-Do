@@ -5,12 +5,10 @@
 //  Created by Jay on 8/23/25.
 //
 
-
 import Foundation
 
 @MainActor
-class MainViewModel: ObservableObject {
-    
+class AddFeedbackViewModel: ObservableObject {
+
     private let navigationManager = NavigationManager.shared
-    
 }

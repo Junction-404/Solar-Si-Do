@@ -42,4 +42,3 @@ struct WriteFeedbackView: View {
         .padding()
     }
 }
-
