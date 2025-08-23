@@ -30,16 +30,6 @@ struct WriteFeedbackView: View {
             if viewModel.isLoading {
                 ProgressView("생성 중...")
                     .padding(.top)
-            } else if !viewModel.refinedFeedback.isEmpty {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("✅ 생성된 피드백:")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    Text(viewModel.refinedFeedback)
-                        .padding()
-                        .background(Color.green.opacity(0.1))
-                        .cornerRadius(10)
-                }
             }
             
             Spacer()

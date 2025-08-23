@@ -84,7 +84,9 @@ User input: “Howard keeps throwing in random ideas after we finish the layout.
                        let choices = json["choices"] as? [[String: Any]],
                        let message = choices.first?["message"] as? [String: Any],
                        let content = message["content"] as? String {
-                        self.refinedFeedback = content.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let refined = content.trimmingCharacters(in: .whitespacesAndNewlines)
+                        self.refinedFeedback = refined
+                        self.navigationManager.navigate(to: .main(.feedbackResult(refined)))
                     } else {
                         self.refinedFeedback = "⚠️ 응답을 이해할 수 없습니다."
                     }
