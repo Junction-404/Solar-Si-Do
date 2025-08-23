@@ -18,7 +18,7 @@ struct MainView: View {
                         Text("피드백 받기")
                     }
             }
-            .tint(.black)
+            .tint(Color("sendwichBrown"))
         }
     }
 
