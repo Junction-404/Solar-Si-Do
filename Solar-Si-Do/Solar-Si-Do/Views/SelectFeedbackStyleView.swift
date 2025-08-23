@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct WriteFeedbackStyleView: View {
-    @StateObject private var viewModel = WriteFeedbackStyleViewModel()
+struct SelectFeedbackStyleView: View {
+    @StateObject private var viewModel = SelectFeedbackStyleViewModel()
     @State private var selectedIndex: Int? = nil
 
     var body: some View {
@@ -63,5 +63,5 @@ struct WriteFeedbackStyleView: View {
 }
 
 #Preview {
-    WriteFeedbackStyleView()
+    SelectFeedbackStyleView()
 }

@@ -9,7 +9,7 @@
 import Foundation
 
 @MainActor
-class WriteFeedbackStyleViewModel: ObservableObject {
+class SelectFeedbackStyleViewModel: ObservableObject {
     
     private let navigationManager = NavigationManager.shared
     
