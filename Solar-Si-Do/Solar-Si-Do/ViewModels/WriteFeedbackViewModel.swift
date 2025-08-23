@@ -14,6 +14,7 @@ class WriteFeedbackViewModel: ObservableObject {
     
     @Published var rawInput: String = ""
     @Published var refinedFeedback: String = ""
+    @Published var actionItems: [String] = []
     @Published var isLoading: Bool = false
 
     private let systemPrompt = """
@@ -22,18 +23,27 @@ You are an assistant that rewrites emotionally charged complaints about team mem
 User input may include frustration, sarcasm, or blunt remarks.
 Your task is to acknowledge the core concern, soften the tone, and rewrite the message as a clear, respectful, and sincere piece of feedback in the form of natural, professional dialogue.
 
-Your output must be directly shareable — do not include alternative versions, explanations, summaries, or any meta-comments.
+Your output must contain:
+1. `feedback`: The rewritten message only. No brackets, no alternatives.
+2. `action_items`: A JSON array of 1–5 actionable suggestions for the teammate to improve, based on the original complaint. Each item should be a short imperative sentence. (e.g., “Share ideas during planning sessions instead of after finalization.”)
 
-Please follow these principles:
+Your response must be a **JSON object** with two fields: `feedback` and `action_items`.
+
+Please follow these principles when you write "feedback" field:
 – Reflect the user’s underlying intention with softened, emotionally intelligent language
 – Focus on specific behaviors and clear, non-accusatory suggestions for improvement
 – Maintain a tone of collaboration, trust, and mutual respect
-– Do not add extra commentary, options, or brackets — return only the final message
 
-Example
-User input: “Howard keeps throwing in random ideas after we finish the layout. It’s messing everything up.”
-→ Output:
-“Howard, I really appreciate how you consistently bring fresh ideas to the table — especially in the early stages. That said, when major changes are introduced after a layout has already been finalized, it can sometimes disrupt the workflow and strain the schedule. If possible, could we align on a process to integrate late-stage ideas more smoothly?”
+Example output:
+{
+  "feedback": "Howard, I really appreciate...",
+  "action_items": [
+    "Share new ideas before layout is finalized.",
+    "Discuss late changes directly with the designer."
+  ]
+
+Please make all output in Korean.
+}
 """
 
     func generateFeedback() {
@@ -83,15 +93,33 @@ User input: “Howard keeps throwing in random ideas after we finish the layout.
                     if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                        let choices = json["choices"] as? [[String: Any]],
                        let message = choices.first?["message"] as? [String: Any],
-                       let content = message["content"] as? String {
-                        let refined = content.trimmingCharacters(in: .whitespacesAndNewlines)
-                        self.refinedFeedback = refined
-                        self.navigationManager.navigate(to: .main(.feedbackResult(refined)))
+                       let contentString = message["content"] as? String {
+
+                        let trimmed = contentString.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                        if let contentData = trimmed.data(using: .utf8),
+                           let contentJSON = try JSONSerialization.jsonObject(with: contentData) as? [String: Any],
+                           let feedback = contentJSON["feedback"] as? String,
+                           let actions = contentJSON["action_items"] as? [String] {
+
+                            self.refinedFeedback = feedback
+                            self.actionItems = actions
+
+                            self.navigationManager.navigate(to: .main(.feedbackResult(
+                                feedback: self.refinedFeedback,
+                                actionItems: self.actionItems
+                            )))
+                        } else {
+                            self.refinedFeedback = "⚠️ 응답을 이해할 수 없습니다 (중첩 JSON)."
+                            self.actionItems = []
+                        }
                     } else {
                         self.refinedFeedback = "⚠️ 응답을 이해할 수 없습니다."
+                        self.actionItems = []
                     }
                 } catch {
                     self.refinedFeedback = "⚠️ 디코딩 실패: \(error)"
+                    self.actionItems = []
                 }
             }
         }.resume()

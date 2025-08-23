@@ -2,19 +2,26 @@ import SwiftUI
 
 struct WriteFeedbackView: View {
     @StateObject private var viewModel = WriteFeedbackViewModel()
+    let peerName: String = "하워드"
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text("나한테만 말해봐~\n\n하워드에 대해 가감없이 말해봐\n하워드는 어떤 팀원이야?")
-                .font(.headline)
-                .frame(maxWidth: .infinity, maxHeight: 200, alignment: .leading)
+        VStack(spacing: 0) {
+            HStack{
+                Text("나한테만 편하게 말해봐~\n\(peerName)는 어떤 팀원이야?")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, maxHeight: 120, alignment: .leading)
+                Image("character")
+                    .border(Color.gray, width: 1)
+            }
             
             TextEditor(text: $viewModel.rawInput)
-                .frame(height: 140)
+                .frame(height: 400)
                 .padding()
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(10)
             
+            Spacer()
+                        
             Button {
                 viewModel.generateFeedback()
             } label: {
@@ -31,8 +38,6 @@ struct WriteFeedbackView: View {
                 ProgressView("생성 중...")
                     .padding(.top)
             }
-            
-            Spacer()
         }
         .padding()
     }
