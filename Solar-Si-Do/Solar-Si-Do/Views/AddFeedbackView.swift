@@ -24,9 +24,14 @@ struct AddFeedbackView: View {
 
             VStack(spacing: 0) {
                 HStack {
-                    Text("TEAM 404")
-                        .font(.system(size: 20, weight: .semibold))
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Button(
+                        action: viewModel.tapBackButton
+                    ) {
+                        Text("TEAM 404")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.black)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
 
                     Spacer()
 
@@ -44,8 +49,6 @@ struct AddFeedbackView: View {
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 88, height: 130)
 
-                    Spacer()
-
                     ZStack {
                         Image("speechBubbleGreen")
                             .resizable()
@@ -61,7 +64,8 @@ struct AddFeedbackView: View {
 
                 VStack(spacing: 0) {
                     ForEach(0..<3, id: \.self) { index in
-                        Button(action:
+                        Button(
+                            action:
                                 viewModel.tapFeedbackButton
                         ) {
                             HStack {
@@ -100,6 +104,7 @@ struct AddFeedbackView: View {
                 Spacer()
             }
         }
+        .toolbar(.hidden)
     }
 }
 

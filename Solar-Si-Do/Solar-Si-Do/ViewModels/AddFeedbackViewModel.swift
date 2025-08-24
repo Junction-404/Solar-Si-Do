@@ -12,6 +12,10 @@ class AddFeedbackViewModel: ObservableObject {
 
     private let navigationManager = NavigationManager.shared
     
+    func tapBackButton() {
+        navigationManager.pop()
+    }
+    
     func tapFeedbackButton() {
         navigationManager.navigate(to: .main(.writeFeedback))
     }
