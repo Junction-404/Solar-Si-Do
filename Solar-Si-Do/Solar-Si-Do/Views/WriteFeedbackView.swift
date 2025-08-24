@@ -4,7 +4,7 @@ struct WriteFeedbackView: View {
     @Environment(\.dismiss) private var dismiss
     
     @StateObject private var viewModel = WriteFeedbackViewModel()
-    let peerName: String = "하워드"
+    let peerName: String = "엘레나"
     
     var body: some View {
         ZStack{
@@ -76,14 +76,19 @@ struct WriteFeedbackView: View {
                         .foregroundColor(.white)
                         .cornerRadius(12)
                 }
+                .padding(.bottom, 20)
                 
-                if viewModel.isLoading {
-                    ProgressView("생성 중...")
-                        .padding(.top)
-                }
+//                if viewModel.isLoading {
+//                    ProgressView("생성 중...")
+//                        .padding(.top)
+//                }
             }
             .padding(.horizontal, 20)
         }
         .toolbar(.hidden)
     }
+}
+
+#Preview {
+    WriteFeedbackView()
 }

@@ -107,7 +107,8 @@ Please make all output in Korean.
 
                             self.navigationManager.navigate(to: .main(.feedbackResult(
                                 feedback: self.refinedFeedback,
-                                actionItems: self.actionItems
+                                actionItems: self.actionItems,
+                                rawInput: self.rawInput
                             )))
                         } else {
                             self.refinedFeedback = "⚠️ 응답을 이해할 수 없습니다 (중첩 JSON)."

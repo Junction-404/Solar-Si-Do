@@ -21,7 +21,6 @@ struct MainView: View {
             .tint(Color("sendwichBrown"))
         }
     }
-
 }
 
 #Preview {

@@ -8,39 +8,194 @@
 import SwiftUI
 
 struct FeedbackResultView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var isRawVisible: Bool = false
+    @State private var isEditingFeedback = false
+    @State private var editableFeedbackText: String
+    @FocusState private var isTextEditorFocused: Bool
+    
     var refinedFeedback: String = ""
     var actionItems: [String] = []
+    let rawInput: String
     
-        var body: some View {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("너의 생각들을 기반으로\n하워드에게 전달할 피드백을 정리했어")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, maxHeight: 140, alignment: .leading)
-
-                Text(refinedFeedback)
-                    .padding(20)
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(10)
+    let peerName: String = "엘레나"
+    
+    init(refinedFeedback: String = "", actionItems: [String] = [], rawInput: String) {
+        self._editableFeedbackText = State(initialValue: refinedFeedback)
+        self.refinedFeedback = refinedFeedback
+        self.actionItems = actionItems
+        self.rawInput = rawInput
+    }
+    
+    var body: some View {
+        ZStack{
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color("sendwichGradientYellowGreen"),
+                    Color("sendwichGradientYellow"),
+                ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            
+            VStack{
+                HStack {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 23))
+                            .foregroundColor(.black)
+                            .padding(8)
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 14)
                 
-                if !actionItems.isEmpty {
-                    Text("하워드에게 추천하는 액션 아이템")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .padding(.top, 18)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        
+                        HStack{
+                            Image("sendySmile")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 110, height: 120)
+                            
+                            Spacer()
+                            
+                            ZStack{
+                                Image("speechBubbleGreen")
+                                    .resizable()
+                                    .frame(width: 248, height: 76)
+                                
+                                Text("너의 생각들을 기반으로\n피드백을 정리했어")
+                                    .font(.system(size: 17, weight: .semibold))
+                                    .lineSpacing(2)
+                            }
+                        }
+                        .padding(.top, 12)
+                        .padding(.bottom, -6)
+                        .padding(.horizontal, 20)
+                        
+                        Group {
+                            if isEditingFeedback {
+                                TextEditor(text: $editableFeedbackText)
+                                    .padding(20)
+                                    .background(Color.sendwichYellow)
+                                    .scrollContentBackground(.hidden)
+                                    .cornerRadius(20)
+                                    .padding(.horizontal, 20)
+                                    .frame(minHeight: 120) // <- 여기가 핵심
+                                
+                                    .focused($isTextEditorFocused)
+                                    .toolbar {
+                                        ToolbarItemGroup(placement: .keyboard) {
+                                            Spacer()
+                                            Button("완료") {
+                                                isEditingFeedback = false
+                                                isTextEditorFocused = false
+                                                // 여기서 원본 refinedFeedback에 저장하려면:
+                                                // refinedFeedback = editableFeedbackText
+                                            }
+                                            .font(.system(size: 16, weight: .semibold))
+                                        }
+                                    }
+                            } else {
+                                Text(editableFeedbackText)
+                                    .padding(20)
+                                    .background(Color.sendwichYellow)
+                                    .cornerRadius(20)
+                                    .padding(.horizontal, 20)
+                            }
+                        }
+                        
+                        if !actionItems.isEmpty {
+                            Text("엘레나에게 추천하는 액션 아이템")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .padding(.top, 18)
+                                .padding(.horizontal, 20)
+                            
+                            ForEach(actionItems, id: \.self){ actionItem in
+                                Text("  •  \(actionItem)")
+                                    .padding(-8)
+                            }
+                            .padding(.horizontal, 20)
+                        }
+                        
+                        HStack{
+                            Text("내가 엘레나에 대해 한 이야기")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .padding(.top, 18)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                isRawVisible.toggle()
+                            }) {
+                                Image(systemName: isRawVisible ? "chevron.up" : "chevron.down")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(.black.opacity(0.6))
+                                    .padding(.top, 18)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        
+                        if isRawVisible {
+                            Text(rawInput)
+                                .font(.system(size: 14))
+                                .foregroundColor(.black.opacity(0.8))
+                                .padding(.horizontal, 20)
+                        }
+                        Spacer()
+                    }
                     
-                    ForEach(actionItems, id: \.self){ actionItem in
-                        Text("\(actionItem)")
+                }
+                .navigationTitle("피드백 결과")
+                .toolbar(.hidden)
+                
+                HStack {
+                    Button {
+                        isEditingFeedback = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            isTextEditorFocused = true
+                        }
+                    } label: {
+                        Text("수정")
+                            .font(.system(size: 16, weight: .semibold))
+                            .padding()
+                            .frame(maxWidth: 120)
+                            .background(.sendwichYellow)
+                            .foregroundColor(.sendwichBrown)
+                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(.sendwichBrown, lineWidth: 1)
+                            )
+                    }
+                    Button {
+                        //
+                    } label: {
+                        Text("피드백 전달")
+                            .font(.system(size: 16, weight: .semibold))
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.sendwichBrown)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
                     }
                 }
-                
-                Spacer()
+                .padding(.horizontal, 20)
             }
-            .padding()
-            .navigationTitle("피드백 결과")
         }
+    }
 }
 
 #Preview {
-    FeedbackResultView(refinedFeedback: "하워드, 항상 창의적인 아이디어를 적극적으로 내주셔서 프로젝트에 많은 활력을 더해주고 있어요. 특히 초기 단계에서 다양한 관점을 제시해주는 점은 정말 큰 강점이에요. 다만, ​진행 중인 단계에서 갑작스럽게 새로운 아이디어가 제시되면​ 현재 워크플로우에 혼란이 생기거나 일정 조율이 어려워질 때가 있어요. 예를 들어, 디자인 컨펌이 끝난 후 레이아웃 변경을 제안해주실 경우, 팀원들의 피로도가 높아지는 것 같아요.", actionItems: ["양말 신기", "열심히 말하기"])
+    FeedbackResultView(
+        refinedFeedback: "하워드, 항상 창의적인 아이디어를 적극적으로 내주셔서 프로젝트에 많은 활력을 더해주고 있어요. 특히 초기 단계에서 다양한 관점을 제시해주는 점은 정말 큰 강점이에요. 다만, ​진행 중인 단계에서 갑작스럽게 새로운 아이디어가 제시되면​ 현재 워크플로우에 혼란이 생기거나 일정 조율이 어려워질 때가 있어요. 예를 들어, 디자인 컨펌이 끝난 후 레이아웃 변경을 제안해주실 경우, 팀원들의 피로도가 높아지는 것 같아요.",
+        actionItems: ["양말 신기", "열심히 말하기"],
+        rawInput: "보노보노 관점을 제시해주는 점은 정말 큰 강점이에요. 다만, ​진행 중인 단계에서 갑작스럽게 새로운 아이디어가 제시되면​ 현재 워크플로우에 혼란이 생기거나 일정 조율이 어려워질 때가 있어요. 예를 들어, 디자인 컨펌이 끝난 후 레이아웃 변경을 제안해주실 경우, 팀원들의 피로도가 높아지는 것 같아요. 관점을 제시해주는 점은 정말 큰 강점이에요. 다만, ​진행 중인 단계에서 갑작스럽게 새로운 아이디어가 제시되면​ 현재 워크플로우에 혼란이 생기거나 일정 조율이 어려워질 때가 있어요. 예를 들어, 디자인 컨펌이 끝난 후 레이아웃 변경을 제안해주실 경우, 팀원들의 피로도가 높아지는 것 같아요.")
 }
