@@ -10,12 +10,22 @@ import SwiftUI
 struct FeedbackResultView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isRawVisible: Bool = false
+    @State private var isEditingFeedback = false
+    @State private var editableFeedbackText: String
+    @FocusState private var isTextEditorFocused: Bool
     
     var refinedFeedback: String = ""
     var actionItems: [String] = []
     let rawInput: String
     
     let peerName: String = "엘레나"
+    
+    init(refinedFeedback: String = "", actionItems: [String] = [], rawInput: String) {
+        self._editableFeedbackText = State(initialValue: refinedFeedback)
+        self.refinedFeedback = refinedFeedback
+        self.actionItems = actionItems
+        self.rawInput = rawInput
+    }
     
     var body: some View {
         ZStack{
@@ -68,11 +78,37 @@ struct FeedbackResultView: View {
                         .padding(.bottom, -6)
                         .padding(.horizontal, 20)
                         
-                        Text(refinedFeedback)
-                            .padding(20)
-                            .background(Color.sendwichYellow)
-                            .cornerRadius(20)
-                            .padding(.horizontal, 20)
+                        Group {
+                            if isEditingFeedback {
+                                TextEditor(text: $editableFeedbackText)
+                                    .padding(20)
+                                    .background(Color.sendwichYellow)
+                                    .scrollContentBackground(.hidden)
+                                    .cornerRadius(20)
+                                    .padding(.horizontal, 20)
+                                    .frame(minHeight: 120) // <- 여기가 핵심
+                                
+                                    .focused($isTextEditorFocused)
+                                    .toolbar {
+                                        ToolbarItemGroup(placement: .keyboard) {
+                                            Spacer()
+                                            Button("완료") {
+                                                isEditingFeedback = false
+                                                isTextEditorFocused = false
+                                                // 여기서 원본 refinedFeedback에 저장하려면:
+                                                // refinedFeedback = editableFeedbackText
+                                            }
+                                            .font(.system(size: 16, weight: .semibold))
+                                        }
+                                    }
+                            } else {
+                                Text(editableFeedbackText)
+                                    .padding(20)
+                                    .background(Color.sendwichYellow)
+                                    .cornerRadius(20)
+                                    .padding(.horizontal, 20)
+                            }
+                        }
                         
                         if !actionItems.isEmpty {
                             Text("엘레나에게 추천하는 액션 아이템")
@@ -122,7 +158,10 @@ struct FeedbackResultView: View {
                 
                 HStack {
                     Button {
-                        //
+                        isEditingFeedback = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            isTextEditorFocused = true
+                        }
                     } label: {
                         Text("수정")
                             .font(.system(size: 16, weight: .semibold))
@@ -133,7 +172,7 @@ struct FeedbackResultView: View {
                             .cornerRadius(12)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.sendwichBrown, lineWidth: 1)
+                                    .stroke(.sendwichBrown, lineWidth: 1)
                             )
                     }
                     Button {
