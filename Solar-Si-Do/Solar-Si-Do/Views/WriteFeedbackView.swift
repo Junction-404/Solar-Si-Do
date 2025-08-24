@@ -78,10 +78,10 @@ struct WriteFeedbackView: View {
                 }
                 .padding(.bottom, 20)
                 
-                if viewModel.isLoading {
-                    ProgressView("생성 중...")
-                        .padding(.top)
-                }
+//                if viewModel.isLoading {
+//                    ProgressView("생성 중...")
+//                        .padding(.top)
+//                }
             }
             .padding(.horizontal, 20)
         }
