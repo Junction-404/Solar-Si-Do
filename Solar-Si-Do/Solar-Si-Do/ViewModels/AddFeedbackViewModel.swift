@@ -11,4 +11,8 @@ import Foundation
 class AddFeedbackViewModel: ObservableObject {
 
     private let navigationManager = NavigationManager.shared
+    
+    func tapFeedbackButton() {
+        navigationManager.navigate(to: .main(.writeFeedback))
+    }
 }
