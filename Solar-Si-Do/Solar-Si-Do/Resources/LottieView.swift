@@ -2,13 +2,13 @@ import SwiftUI
 import Lottie
 
 struct LottieView: UIViewRepresentable {
-    let animationName: String
+    let animation: LottieAnimation
     var loopMode: LottieLoopMode = .loop
 
     func makeUIView(context: Context) -> some UIView {
         let view = UIView(frame: .zero)
 
-        let animationView = LottieAnimationView(name: animationName)
+        let animationView = LottieAnimationView(animation: animation)
         animationView.loopMode = loopMode
         animationView.contentMode = .scaleAspectFit
         animationView.translatesAutoresizingMaskIntoConstraints = false
