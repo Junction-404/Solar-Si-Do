@@ -22,13 +22,14 @@ struct CreatingFeedbackView: View {
                     .frame(width: 324, height: 324)
                     .padding(.top, 119)
             } else {
-                ProgressView()  // fallback UI
+                ProgressView()
                     .frame(width: 324, height: 324)
                     .padding(.top, 119)
             }
 
             Spacer()
         }
+        .toolbar(.hidden)
     }
 }
 
