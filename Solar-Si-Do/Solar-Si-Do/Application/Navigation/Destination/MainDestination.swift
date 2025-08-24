@@ -4,6 +4,7 @@ enum MainDestination: NavigationDestination {
     case home
     case selectFeedbackStyle
     case writeFeedback
+    case creatingFeedback
     case feedbackResult(feedback: String, actionItems: [String], rawInput: String)
     
     @ViewBuilder
@@ -15,6 +16,8 @@ enum MainDestination: NavigationDestination {
             SelectFeedbackStyleView()
         case .writeFeedback:
             WriteFeedbackView()
+        case .creatingFeedback:
+            CreatingFeedbackView()
         case .feedbackResult(let feedback, let actionItems, let rawInput):
             FeedbackResultView(refinedFeedback: feedback, actionItems: actionItems, rawInput: rawInput)
         }

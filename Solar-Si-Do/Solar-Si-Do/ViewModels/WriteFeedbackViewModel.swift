@@ -16,7 +16,11 @@ class WriteFeedbackViewModel: ObservableObject {
     @Published var refinedFeedback: String = ""
     @Published var actionItems: [String] = []
     @Published var isLoading: Bool = false
-
+    @Published var showLoadingOverlay: Bool = false
+    
+    private var earliestNavigateAt: Date?
+    private let minLoadingSeconds: Double = 3.0
+    
     private let systemPrompt = """
 You are an assistant that rewrites emotionally charged complaints about team members into empathetic, respectful, and constructive feedback — written in a way that the user can directly copy and send to the person concerned without further editing.
 
@@ -48,6 +52,9 @@ Please make all output in Korean.
 
     func generateFeedback() {
         guard !rawInput.isEmpty else { return }
+        showLoadingOverlay = true
+        earliestNavigateAt = Date().addingTimeInterval(minLoadingSeconds)
+        
         isLoading = true
         let url = URL(string: "https://api.upstage.ai/v1/chat/completions")!
         var request = URLRequest(url: url)
@@ -94,24 +101,27 @@ Please make all output in Korean.
                        let choices = json["choices"] as? [[String: Any]],
                        let message = choices.first?["message"] as? [String: Any],
                        let contentString = message["content"] as? String {
-
+                        
                         let trimmed = contentString.trimmingCharacters(in: .whitespacesAndNewlines)
-
+                        
                         if let contentData = trimmed.data(using: .utf8),
                            let contentJSON = try JSONSerialization.jsonObject(with: contentData) as? [String: Any],
                            let feedback = contentJSON["feedback"] as? String,
                            let actions = contentJSON["action_items"] as? [String] {
-
+                            
                             self.refinedFeedback = feedback
                             self.actionItems = actions
-
-                            self.navigationManager.navigate(to: .main(.feedbackResult(
-                                feedback: self.refinedFeedback,
-                                actionItems: self.actionItems,
-                                rawInput: self.rawInput
-                            )))
+                            
+                            let remaining = max(0, self.earliestNavigateAt?.timeIntervalSinceNow ?? 0)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + remaining) {
+                                self.navigationManager.navigate(to: .main(.feedbackResult(
+                                    feedback: self.refinedFeedback,
+                                    actionItems: self.actionItems,
+                                    rawInput: self.rawInput
+                                )))
+                            }
                         } else {
-                            self.refinedFeedback = "⚠️ 응답을 이해할 수 없습니다 (중첩 JSON)."
+                            self.refinedFeedback = "⚠️ 응답을 이해할 수 없습니다."
                             self.actionItems = []
                         }
                     } else {
