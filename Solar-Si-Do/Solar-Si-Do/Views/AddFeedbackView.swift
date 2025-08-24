@@ -47,7 +47,7 @@ struct AddFeedbackView: View {
                     Spacer()
 
                     ZStack {
-                        Image("speechBubble")
+                        Image("speechBubbleGreen")
                             .resizable()
                             .frame(width: 252, height: 68)
 
