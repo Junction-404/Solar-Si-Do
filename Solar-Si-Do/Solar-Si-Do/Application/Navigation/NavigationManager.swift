@@ -10,7 +10,7 @@ class NavigationManager: ObservableObject {
     
     private init() {
         // TODO: 온보딩 정보 불러옴
-        root = .main(.home)
+        root = .main(.selectFeedbackStyle)
     }
     
     func navigate(to destination: AppDestination) {
@@ -24,7 +24,7 @@ class NavigationManager: ObservableObject {
     
     func startMainFlow() {
         path = NavigationPath()
-        root = .main(.home)
+        root = .main(.selectFeedbackStyle)
     }
     
     func getRootView() -> some View {
