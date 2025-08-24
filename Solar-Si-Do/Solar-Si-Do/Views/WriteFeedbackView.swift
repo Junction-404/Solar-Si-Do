@@ -4,7 +4,7 @@ struct WriteFeedbackView: View {
     @Environment(\.dismiss) private var dismiss
     
     @StateObject private var viewModel = WriteFeedbackViewModel()
-    let peerName: String = "하워드"
+    let peerName: String = "엘레나"
     
     var body: some View {
         ZStack{
@@ -87,4 +87,8 @@ struct WriteFeedbackView: View {
         }
         .toolbar(.hidden)
     }
+}
+
+#Preview {
+    WriteFeedbackView()
 }
