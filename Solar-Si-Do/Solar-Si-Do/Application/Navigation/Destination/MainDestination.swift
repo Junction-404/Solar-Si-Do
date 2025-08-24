@@ -6,6 +6,7 @@ enum MainDestination: NavigationDestination {
     case writeFeedback
     case creatingFeedback
     case feedbackResult(feedback: String, actionItems: [String], rawInput: String)
+    case sendFeedback
     
     @ViewBuilder
     func view() -> some View {
@@ -20,6 +21,8 @@ enum MainDestination: NavigationDestination {
             CreatingFeedbackView()
         case .feedbackResult(let feedback, let actionItems, let rawInput):
             FeedbackResultView(refinedFeedback: feedback, actionItems: actionItems, rawInput: rawInput)
+        case .sendFeedback:
+            SendFeedbackView()
         }
     }
 }

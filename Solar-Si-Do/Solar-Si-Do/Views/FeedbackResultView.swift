@@ -176,7 +176,7 @@ struct FeedbackResultView: View {
                             )
                     }
                     Button {
-                        //
+                        NavigationManager.shared.navigate(to: .main(.sendFeedback))
                     } label: {
                         Text("피드백 전달")
                             .font(.system(size: 16, weight: .semibold))
