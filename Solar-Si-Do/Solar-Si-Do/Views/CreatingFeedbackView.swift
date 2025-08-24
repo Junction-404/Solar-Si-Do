@@ -21,6 +21,7 @@ struct CreatingFeedbackView: View {
             
             Spacer()
         }
+        .toolbar(.hidden)
     }
 }
 

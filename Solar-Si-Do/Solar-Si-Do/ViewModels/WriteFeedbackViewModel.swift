@@ -19,7 +19,7 @@ class WriteFeedbackViewModel: ObservableObject {
     @Published var showLoadingOverlay: Bool = false
     
     private var earliestNavigateAt: Date?
-    private let minLoadingSeconds: Double = 3.0
+    private let minLoadingSeconds: Double = 7.0
     
     private let systemPrompt = """
 You are an assistant that rewrites emotionally charged complaints about team members into empathetic, respectful, and constructive feedback — written in a way that the user can directly copy and send to the person concerned without further editing.
