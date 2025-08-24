@@ -66,10 +66,12 @@ struct WriteFeedbackView: View {
                 .padding(.bottom, 44)
                 
                 Button {
+                    UIApplication.shared.endEditing()
+                    NavigationManager.shared.navigate(to: .main(.creatingFeedback))
                     viewModel.generateFeedback()
                 } label: {
-                    Text("다음")
-                        .font(.system(size: 16, weight: .semibold))
+                        Text("다음")
+                            .font(.system(size: 16, weight: .semibold))
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.sendwichBrown)
@@ -79,9 +81,9 @@ struct WriteFeedbackView: View {
                 .padding(.bottom, 20)
                 
 //                if viewModel.isLoading {
-//                    ProgressView("생성 중...")
-//                        .padding(.top)
-//                }
+                //                    ProgressView("생성 중...")
+                //                        .padding(.top)
+                //                }
             }
             .padding(.horizontal, 20)
         }
